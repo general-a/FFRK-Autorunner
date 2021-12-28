@@ -4,7 +4,7 @@ from PythonScript.src.Navigator.Events.Proceed import Proceed
 class TreasureEvent(Event):
     
     END = 'PAINTING_SELECT'
-    STATES = ['TREASURE_ROOM','CONFIRM_CHOICE', 'OPENED_TREASURE', 'CONFIRM_EXIT', 'EXIT']
+    STATES = ['TREASURE_ROOM','CONFIRM_CHOICE', 'OPENED_TREASURE', 'CONFIRM_EXIT']
     
     def __init__(self):
         super().__init__('CLICK_MIDDLE_CHEST', self.STATES)
@@ -13,7 +13,7 @@ class TreasureEvent(Event):
     def _advance(self):
         proceed = self.proceed
         stateNumber = self.stateNumber
-        if self.stateNumber == 1 or self.stateNumber == 4:
+        if self.stateNumber == 1:
             self.setActionAndState(proceed.getAction(), self.STATES[stateNumber])
         elif self.stateNumber == 2:
             self.setActionAndState('PROCEED', self.STATES[stateNumber])

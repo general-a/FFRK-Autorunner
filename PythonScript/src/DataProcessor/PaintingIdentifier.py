@@ -14,6 +14,7 @@ class PaintingIdentifier:
         self.SCREEN_FILE = configurer.getScreenFile()
         self.buttonIdentifier = ButtonIdentifier(self.SCREEN_FILE)
         self.BATTLE_END = configurer.getFileFromPath('BattleEndFile')
+        self.PAINTING_ROOM = configurer.getFileFromPath('PaintingRoomFile')
         self.TOLERANCE = configurer.getTolerance('InBattle')
     
     def identifyPainting(self, paintingType: str):
@@ -45,6 +46,12 @@ class PaintingIdentifier:
         result = ElementFinder.matchPercentage(self.SCREEN_FILE, self.BATTLE_END)
         print(result)
         return self.TOLERANCE > result
+    
+    def inPaintingRoom(self):
+        result = ElementFinder.matchPercentage(self.SCREEN_FILE, self.PAINTING_ROOM)
+        print(result)
+        return self.TOLERANCE < result
+           
     
     def getScreenFile(self):
         return self.SCREEN_FILE

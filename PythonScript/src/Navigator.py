@@ -32,7 +32,7 @@ class Navigator:
         identifier = self.identifier
         controller = Controller()
         partyChooser = PartyChooser()
-        for i in range(100):
+        for i in range(1000):
             controller.getScreenshot()
             painting = self.choosePainting()
             print('Selected: ', painting)
@@ -50,9 +50,10 @@ class Navigator:
             
     
     def tester(self):
-        print('sleeping for 10')
-        time.sleep(10)
+        print('sleeping for 2')
+        time.sleep(2)
     
+    #Todo: make sure painting selected is not a portal painting when there's treasure
     def choosePainting(self):
         print('Selecting painting...')
         self.identifier.getPaintings()
