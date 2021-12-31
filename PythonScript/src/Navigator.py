@@ -28,7 +28,7 @@ class Navigator:
                 controller.clickScreen(loc)
                 time.sleep(1)
 
-
+            
         identifier = self.identifier
         controller = Controller()
         partyChooser = PartyChooser()
