@@ -95,7 +95,7 @@ class Executor:
     @staticmethod
     def stateWaiter(state):
         UNIVERSAL_WAIT_TIME = 1
-        DOOR_WAIT = 5
+        DOOR_WAIT = 2
         PARTY_TIME = 7
         BATTLE_INFO = 3
         CHEST_TIME = 3

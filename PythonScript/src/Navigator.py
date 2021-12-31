@@ -28,7 +28,7 @@ class Navigator:
                 controller.clickScreen(loc)
                 time.sleep(1)
 
-            
+
         identifier = self.identifier
         controller = Controller()
         partyChooser = PartyChooser()
@@ -50,8 +50,8 @@ class Navigator:
             
     
     def tester(self):
-        print('sleeping for 2')
-        time.sleep(2)
+        print('sleeping for 3')
+        time.sleep(3)
     
     #Todo: make sure painting selected is not a portal painting when there's treasure
     def choosePainting(self):

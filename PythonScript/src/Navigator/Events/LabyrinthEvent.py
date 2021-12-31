@@ -1,4 +1,5 @@
 from PythonScript.src.Navigator.Events.Event import Event
+import time
 
 class LabyrinthEvent(Event):
     
@@ -10,6 +11,7 @@ class LabyrinthEvent(Event):
         
     
     def _advance(self):
+        time.sleep(5)
         if self.stateNumber < 3:
             self.setActionAndState('PROCEED', self.STATES[self.stateNumber])
         else:

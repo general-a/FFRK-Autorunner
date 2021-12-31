@@ -1,7 +1,7 @@
 from PythonScript.src.Navigator.Events.Event import Event
 from PythonScript.src.Navigator.Events.Proceed import Proceed
 from PythonScript.src.ConfigureSettings import ConfigureSettings
-
+import time
 class ExplorationEvent(Event):
     
     END = 'PAINTING_SELECT'
@@ -21,6 +21,7 @@ class ExplorationEvent(Event):
         if self.stateNumber == 1:
             self.getExplorationResults()
         elif self.stateNumber == 2:
+            time.sleep(3)
             if self.isTreasure():
                 self.setActionAndState('START_TREASURE_EVENT', self.STATES[2])
             else:
@@ -29,6 +30,7 @@ class ExplorationEvent(Event):
             self.setActionAndState(None, None)
             
     def getExplorationResults(self):
+        time.sleep(3)
         if self.isEvent():
             self.setActionAndState(self.proceed.getAction(), self.STATES[4])
             self.endRun()
@@ -49,6 +51,7 @@ class ExplorationEvent(Event):
         return result > self.tolerance
     
     def isTreasure(self):
+        time.sleep(3)
         result = self._getMatchPercent(self.treasureFile)
         return result > self.tolerance
     
