@@ -10,12 +10,12 @@ class EventFactory:
     
     @staticmethod
     
-    def getEvent(event, isExplorationBattle=None):
+    def getEvent(event, isExplorationBattle=False):
         if not event:
             return None
         
-        if event == 'COMBAT':
-            return CombatEvent() #if isExplorationBattle else CombatEvent()        
+        if isExplorationBattle or event == 'COMBAT':
+            return CombatEvent(isExplorationBattle) #if isExplorationBattle else CombatEvent()        
         elif event == 'EXPLORATION':
             return ExplorationEvent()
         elif event == 'BOSS':

@@ -1,7 +1,5 @@
 import abc
-
-from numpy import e
-
+from PythonScript.src.Navigator.Events.CombatEvent import CombatEvent
 from PythonScript.src.Navigator.Events.EventFactory import EventFactory
 
 class Painting(object):
@@ -12,6 +10,19 @@ class Painting(object):
         self.paintingType = paintingType
         self.fileName = fileName
         self.location = location
+        
+    def setPriority(self, priority):
+        self.priority = priority
+        
+    def setController(self, controller):
+        self.controller = controller
+        
+        
+    def setIdentifier(self, identifier):
+        self.identifier = identifier
+        
+    def setPartyChooser(self, partyChooser):
+        self.partyChooser = partyChooser
     
     def getPriority(self):
         return self.priority
@@ -25,13 +36,24 @@ class Painting(object):
     def getLocation(self):
         return self.location
     
-    def startEvent(self):
-        self.event = EventFactory.getEvent(self.paintingType)
+    def startEvent(self, event=None, explorationCombat=False):
+        if not explorationCombat:
+            if event == None:
+                event = self.paintingType
+            self.event = EventFactory.getEvent(event)
+            if isinstance(self.event, CombatEvent):
+                self.event.setPartyChooser(self.partyChooser)
+
+        else:
+            self.event = EventFactory.getEvent(event, True)
+            self.event.setPartyChooser(self.partyChooser)
+            
+        self.event.setController(self.controller)
+        self.event.setIdentifier(self.identifier)
         return self._getAction()
         
     def nextAction(self):
         self.event.stepForward()
-        print(f'{self._getAction()}')
         return self._getAction()
     
     def _getAction(self):

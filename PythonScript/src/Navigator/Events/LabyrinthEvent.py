@@ -16,6 +16,11 @@ class LabyrinthEvent(Event):
             self.setActionAndState('PROCEED', self.STATES[self.stateNumber])
         else:
             self.setActionAndState(None, None)
+            
+    def takeAction(self):
+        action = self.action
+        if action == 'PROCEED':
+            self.waitForButtonAndClick()
     
     
 if __name__ == '__main__':

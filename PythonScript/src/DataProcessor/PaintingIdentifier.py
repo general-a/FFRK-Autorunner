@@ -1,7 +1,9 @@
 from PythonScript.src.DataProcessor.Paintings.PaintingFactory import PaintingFactory
+from PythonScript.src.DataProcessor.Paintings.ExplorationPainting import ExplorationPainting
 from PythonScript.src.DataProcessor.ElementFinder import ElementFinder
 from PythonScript.src.ConfigureSettings import ConfigureSettings
 from PythonScript.src.DataProcessor.ButtonIdentifier import ButtonIdentifier
+from PythonScript.src.Controller import Controller
 
 class PaintingIdentifier:
     
@@ -16,6 +18,10 @@ class PaintingIdentifier:
         self.BATTLE_END = configurer.getFileFromPath('BattleEndFile')
         self.PAINTING_ROOM = configurer.getFileFromPath('PaintingRoomFile')
         self.TOLERANCE = configurer.getTolerance('InBattle')
+        self.BUTTON = configurer.getFileFromPath('EventFile')
+        self.ELEMENT_PATH = configurer.getFileFromPath('ElementsPath')
+        self.TREASURE_FILES = configurer.getTreasureList()
+        self.tolerance = configurer.getTolerance()
     
     def identifyPainting(self, paintingType: str):
         try:
@@ -35,29 +41,59 @@ class PaintingIdentifier:
             png = self.PAINTING_FILES[i]
             self.identifyPainting(png)
             i += 1
-        self.paintings.sort()
+        return self.paintings
          
             
     def getPaintings(self):
+        Controller().getScreenshot()
         self.populatePaintings()
-        return self.paintings.sort()
+        self.paintings.sort()
+        if self.paintings and isinstance(self.paintings[0], ExplorationPainting) and self.treasureExists():
+            self.setNewPriorities()
+        return self.paintings
+    
+    def setNewPriorities(self):
+        for i in self.paintings:
+            if isinstance(i, ExplorationPainting):
+                i.setPriority(9)
+        self.paintings.sort()
+
     
     def inBattle(self):
         result = ElementFinder.matchPercentage(self.SCREEN_FILE, self.BATTLE_END)
-        print(result)
+        # print(result)
         return self.TOLERANCE > result
     
     def inPaintingRoom(self):
-        result = ElementFinder.matchPercentage(self.SCREEN_FILE, self.PAINTING_ROOM)
+        return self.elementExists(self.PAINTING_ROOM)
+
+
+    def elementExists(self, element, tolerance=None):
+        if not tolerance:
+            tolerance = self.TOLERANCE
+        result = ElementFinder.matchPercentage(self.SCREEN_FILE, element)
         print(result)
-        return self.TOLERANCE < result
-           
+        return tolerance < result
+    
+    def buttonExists(self):
+        return self.elementExists(self.BUTTON, tolerance=.75)
+         
     
     def getScreenFile(self):
         return self.SCREEN_FILE
     
     def clearPaintings(self):
         self.paintings = []
+        
+    def treasureExists(self):
+        screenFile = self.getScreenFile()
+        secondRowTreasure = f'{self.ELEMENT_PATH}{self.TREASURE_FILES[0]}'
+        thirdRowTreasure = f'{self.ELEMENT_PATH}{self.TREASURE_FILES[1]}'
+        propForSecondRow = ElementFinder.matchPercentage(screenFile, secondRowTreasure)
+        probForThirdRow = ElementFinder.matchPercentage(screenFile, thirdRowTreasure)
+        print(f'Prob of teasure in second row: {propForSecondRow} \n Prob for third row:{probForThirdRow}')
+        return (propForSecondRow > self.tolerance or
+                probForThirdRow > self.tolerance)
         
         
     
