@@ -2,7 +2,6 @@ from PythonScript.src.Navigator.Events.Event import Event
 from PythonScript.src.Navigator.Events.Proceed import Proceed
 from PythonScript.src.ConfigureSettings import ConfigureSettings
 from PythonScript.src.DataProcessor.PartyChooser import PartyChooser
-from datetime import datetime
 
 
 import time
@@ -87,7 +86,6 @@ class CombatEvent(Event):
                 
         elif action == 'NETWORK_WAIT':
             inPaintingRoom = False
-            print(datetime.now())
             print('Waiting for paintings...')
             while(not inPaintingRoom):
                 time.sleep(1)

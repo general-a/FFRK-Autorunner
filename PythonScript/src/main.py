@@ -1,4 +1,9 @@
-from GetScreenshot import GetScreenshot
+from PythonScript.src.Walker import Walker
 
-obj = GetScreenshot(1, 1, 100, 100)
-obj.getScreenshot()
+
+def main():
+    nav = Walker()
+    nav.walker()
+
+if __name__ == "__main__":
+    main()

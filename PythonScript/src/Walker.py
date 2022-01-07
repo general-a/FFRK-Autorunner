@@ -6,10 +6,10 @@ from PythonScript.src.DataProcessor.Paintings.ExplorationPainting import Explora
 from PythonScript.src.Navigator.Events.CombatEvent import CombatEvent
 from PythonScript.src.DataProcessor.PartyChooser import PartyChooser
 from PythonScript.src.Navigator.Executor import Executor
-
+from datetime import datetime
 import time
 
-class Navigator:
+class Walker:
     
     configurer = ConfigureSettings()
     ELEMENT_PATH = configurer.getFileFromPath('ElementsPath')
@@ -33,12 +33,13 @@ class Navigator:
         identifier = self.identifier
         controller = Controller()
         partyChooser = PartyChooser()
-        for i in range(1000):
+        for i in range(10000):
             controller.getScreenshot()
             painting = self.choosePainting()
             painting.setController(controller)
             painting.setIdentifier(identifier)
             painting.setPartyChooser(partyChooser)
+            print(datetime.now())
             print('Selected: ', painting)
             loc = painting.getLocation()
             enterPainting()

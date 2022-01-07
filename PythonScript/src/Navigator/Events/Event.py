@@ -96,4 +96,3 @@ class Event(object):
         
     def __str__(self) -> str:
         return f'State:{self.state}, Action:{self.action}, StateNum:{self.stateNumber}'
-

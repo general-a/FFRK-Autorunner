@@ -49,14 +49,15 @@ class BossEvent(CombatEvent):
                 while self.closeExists():
                     self.clickClose()
                     time.sleep(2)
+                    self.controller.getScreenshot()
+
             elif self.stateNumber == 6:
                 pass
             else:
                 self.setActionAndState(None, None)
                 
     def closeExists(self):
-        time.sleep(2)
-        self.identifier.elementExists(self.closeFile)
+        return self.identifier.elementExists(self.closeFile, .9)
         
     
     def clickClose(self):
