@@ -115,7 +115,8 @@ class PaintingIdentifier:
                 probForThirdRow > self.tolerance)
         
     def isShiney(self):
-        results = ElementFinder.findMultipleElements(self.SCREEN_FILE, self.SHINEY_FILE, .98)
+        results = ElementFinder.findMultipleElements(self.SCREEN_FILE, self.SHINEY_FILE, .985)
+        print('Shiny results:', results)
         return results
         
     
