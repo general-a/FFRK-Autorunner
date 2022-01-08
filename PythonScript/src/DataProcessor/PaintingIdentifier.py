@@ -4,6 +4,8 @@ from PythonScript.src.DataProcessor.ElementFinder import ElementFinder
 from PythonScript.src.ConfigureSettings import ConfigureSettings
 from PythonScript.src.DataProcessor.ButtonIdentifier import ButtonIdentifier
 from PythonScript.src.Controller import Controller
+from PythonScript.src.Helper.LocationHelper import LocationHelper
+import math, time
 
 class PaintingIdentifier:
     
@@ -21,6 +23,7 @@ class PaintingIdentifier:
         self.BUTTON = configurer.getFileFromPath('EventFile')
         self.ELEMENT_PATH = configurer.getFileFromPath('ElementsPath')
         self.TREASURE_FILES = configurer.getTreasureList()
+        self.SHINEY_FILE = configurer.getFileFromPath('ShineFile')
         self.tolerance = configurer.getTolerance()
     
     def identifyPainting(self, paintingType: str):
@@ -48,8 +51,12 @@ class PaintingIdentifier:
         Controller().getScreenshot()
         self.populatePaintings()
         self.paintings.sort()
-        if self.paintings and isinstance(self.paintings[0], ExplorationPainting) and self.treasureExists():
-            self.setNewPriorities()
+        shinyPaintings = self.isShiney()
+        if shinyPaintings:
+            print('Shiney!!!')
+            self.handleShiney(shinyPaintings)
+        elif self.paintings and isinstance(self.paintings[0], ExplorationPainting) and self.treasureExists():
+            self.setNewPriorities()       
         return self.paintings
     
     def setNewPriorities(self):
@@ -57,7 +64,19 @@ class PaintingIdentifier:
             if isinstance(i, ExplorationPainting):
                 i.setPriority(9)
         self.paintings.sort()
-
+        
+    
+    def handleShiney(self, shineyPaintings):
+        for i in shineyPaintings:
+            distances = []
+            for j in self.paintings:
+                loc = j.location
+                dist = math.sqrt((loc[0] - i[0])**2 + (loc[1] - i[1])**2)
+                distances.append(dist)
+            
+            ind = distances.index(min(distances))
+            self.paintings[ind].setPriority(-1)                
+        self.paintings.sort()
     
     def inBattle(self):
         result = ElementFinder.matchPercentage(self.SCREEN_FILE, self.BATTLE_END)
@@ -95,9 +114,12 @@ class PaintingIdentifier:
         return (propForSecondRow > self.tolerance or
                 probForThirdRow > self.tolerance)
         
+    def isShiney(self):
+        results = ElementFinder.findMultipleElements(self.SCREEN_FILE, self.SHINEY_FILE, .98)
+        return results
         
     
 if __name__ == '__main__':
     test = PaintingIdentifier()
-    test.populatePaintings()
-    print(test.paintings)
+    res = test.isShiney()
+    LocationHelper().makeLocation(test.SCREEN_FILE, res)
