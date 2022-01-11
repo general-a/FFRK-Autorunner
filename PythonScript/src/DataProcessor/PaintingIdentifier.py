@@ -56,14 +56,15 @@ class PaintingIdentifier:
             print('Shiney!!!')
             self.handleShiney(shinyPaintings)
         elif self.paintings and isinstance(self.paintings[0], ExplorationPainting) and self.treasureExists():
-            self.setNewPriorities()       
+            self.setNewPriorities()
+            
+        self.paintings.sort()
         return self.paintings
     
     def setNewPriorities(self):
         for i in self.paintings:
             if isinstance(i, ExplorationPainting):
                 i.setPriority(9)
-        self.paintings.sort()
         
     
     def handleShiney(self, shineyPaintings):
@@ -76,7 +77,6 @@ class PaintingIdentifier:
             
             ind = distances.index(min(distances))
             self.paintings[ind].setPriority(-1)                
-        self.paintings.sort()
     
     def inBattle(self):
         result = ElementFinder.matchPercentage(self.SCREEN_FILE, self.BATTLE_END)
@@ -116,7 +116,7 @@ class PaintingIdentifier:
         
     def isShiney(self):
         results = ElementFinder.findMultipleElements(self.SCREEN_FILE, self.SHINEY_FILE, .985)
-        print('Shiny results:', results)
+        print('Shiny results: ', results)
         return results
         
     

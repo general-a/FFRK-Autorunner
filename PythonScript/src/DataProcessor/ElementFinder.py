@@ -21,7 +21,7 @@ class ElementFinder:
 
         
     @staticmethod
-    def findMultipleElements(screenFile: str, elementFile:str, threshold = .98):
+    def findMultipleElements(screenFile: str, elementFile:str, threshold = .99):
         uniques = []        
         def removeDuplicates():
 
