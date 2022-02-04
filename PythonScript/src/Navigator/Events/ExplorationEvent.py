@@ -13,15 +13,16 @@ class ExplorationEvent(Event):
         configurer = ConfigureSettings()
         self.proceed = Proceed()
         self.tolerance = configurer.getTolerance('Exploration')
+        self.treasureTolerance = configurer.getTolerance('Treasure')
         self.doorFile = configurer.getFileFromPath('DoorFile')
         self.eventFile = configurer.getFileFromPath('EventFile')
         self.treasureFile = configurer.getFileFromPath('TreasureFile')
+        self.battleFile = configurer.getFileFromPath('BattleFile')
         
     def _advance(self):
         if self.stateNumber == 1:
             self.getExplorationResults()
         elif self.stateNumber == 2:
-            time.sleep(3)
             if self.isTreasure():
                 self.setActionAndState('START_TREASURE_EVENT', self.STATES[2])
             else:
@@ -30,7 +31,7 @@ class ExplorationEvent(Event):
             self.setActionAndState(None, None)
             
     def getExplorationResults(self):
-        time.sleep(3)
+        self.waitForExploration()
         if self.isEvent():
             self.setActionAndState(self.proceed.getAction(), self.STATES[4])
             self.endRun()
@@ -42,21 +43,60 @@ class ExplorationEvent(Event):
         
     def isEvent(self):
         result = self._getMatchPercent(self.eventFile)
-        print(result)
+        # print(result)
         return result > self.tolerance
 
     def isDoor(self):
         result = self._getMatchPercent(self.doorFile)
-        print(result)
+        # print(result)
+        return result > self.tolerance
+    
+    def isBattle(self):
+        result = self._getMatchPercent(self.battleFile)
+        # print(result)
         return result > self.tolerance
     
     def isTreasure(self):
-        time.sleep(3)
         result = self._getMatchPercent(self.treasureFile)
-        return result > self.tolerance
+        # print(result)
+        return result > self.treasureTolerance
     
     def endRun(self):
         self.stateNumber = 3
+        
+    def waitForExploration(self):
+        while not (self.isBattle() or self.isDoor() or self.isEvent()):
+            self.controller.getScreenshot()
+            time.sleep(1)
+            
+    def waitForDoor(self):
+        while not (self.isBattle() or self.isTreasure()):
+            self.controller.getScreenshot()
+            time.sleep(1)
+    
+    def takeAction(self):
+        action = self.action
+        if action == 'PROCEED':
+            self.waitForButtonAndClick()
+                     
+        elif action == 'DETERMINE_STATE':
+            pass
+            
+        elif action == 'DETERMINE_DOOR_TYPE':
+            self.waitForButtonAndClick()
+            self.waitForDoor()
+            
+        elif action == 'START_COMBAT_EVENT':
+            pass
+            
+        elif action == 'START_EFFECT_EVENT':
+            pass
+            
+        elif action == 'START_TREASURE_EVENT':
+            pass
+                        
+        else:
+            raise TypeError(action)  
 
 
 if __name__ == '__main__':

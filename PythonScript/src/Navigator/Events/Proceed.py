@@ -12,3 +12,5 @@ class Proceed(Event):
     def _advance(self):
         self.setActionAndState(None, None)
     
+    def takeAction(self):
+        self.waitForButtonAndClick()

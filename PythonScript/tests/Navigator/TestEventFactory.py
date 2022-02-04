@@ -30,13 +30,15 @@ class TestEventFactory(unittest.TestCase):
         self.assertIsInstance(test, CombatEvent)
         self.assertEqual('PROCEED', test.getAction())
         test.stepForward()
-        self.assertEqual('PROCEED', test.getAction())
+        self.assertEqual('PARTY_SELECTION', test.getAction())
         test.stepForward()
         self.assertEqual('WAIT', test.getAction())
         test.stepForward()
         self.assertEqual('CLICK_SKIP_BUTTON', test.getAction())
         test.stepForward()
         self.assertEqual('PROCEED', test.getAction())
+        test.stepForward()
+        self.assertEqual('NETWORK_WAIT', test.getAction())
         test.stepForward()
         self.assertEqual(None, test.getAction())
 
@@ -47,15 +49,17 @@ class TestEventFactory(unittest.TestCase):
         self.assertIsInstance(test, CombatEvent)
         self.assertEqual('PROCEED', test.getAction())
         test.stepForward()
-        self.assertEqual('PROCEED', test.getAction())
+        self.assertEqual('PARTY_SELECTION', test.getAction())
         test.stepForward()
-        self.assertEqual('PROCEED', test.getAction())
+        self.assertEqual('CLICK_OK', test.getAction())
         test.stepForward()
         self.assertEqual('WAIT', test.getAction())
         test.stepForward()
         self.assertEqual('CLICK_SKIP_BUTTON', test.getAction())
         test.stepForward()
         self.assertEqual('PROCEED', test.getAction())
+        test.stepForward()
+        self.assertEqual('NETWORK_WAIT', test.getAction())
         test.stepForward()
         self.assertEqual(None, test.getAction())
 
@@ -116,12 +120,15 @@ class TestEventFactory(unittest.TestCase):
         self.assertEqual('START_COMBAT_EVENT', test.getAction())
         test.stepForward()
         self.assertEqual(None, test.getAction())
-        
+    
+
     @patch.object(ExplorationEvent, 'isEvent')    
     @patch.object(ExplorationEvent, 'isDoor')
-    def test_FactoryExplorationCombat(self, mockedDoor, mockedEvent):
+    @patch.object(ExplorationEvent, 'isBattle')
+    def test_FactoryExplorationCombat(self, mockedCombat, mockedDoor, mockedEvent):
         mockedDoor.return_value = False
         mockedEvent.return_value = False
+        mockedCombat.return_value = True
         test = EventFactory.getEvent('EXPLORATION')
         self.assertIsInstance(test, ExplorationEvent)
         self.assertEqual('DETERMINE_STATE', test.getAction())
@@ -148,8 +155,6 @@ class TestEventFactory(unittest.TestCase):
         self.assertEqual('PROCEED', test.getAction())
         test.stepForward()
         self.assertEqual('CLICK_OK', test.getAction())
-        test.stepForward()
-        self.assertEqual('PROCEED', test.getAction())
         test.stepForward()
         self.assertEqual(None, test.getAction())
     

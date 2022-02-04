@@ -27,6 +27,9 @@ class ButtonIdentifier:
     def getMiddleChest(self):
         return self.getButtonLocation('middlechest.png')
 
+    def getEnterButton(self):
+        return self.getButtonLocation('enter.png')
+    
 
 
 if __name__ == '__main__':
