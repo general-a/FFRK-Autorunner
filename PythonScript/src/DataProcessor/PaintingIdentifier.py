@@ -91,11 +91,11 @@ class PaintingIdentifier:
         if not tolerance:
             tolerance = self.TOLERANCE
         result = ElementFinder.matchPercentage(self.SCREEN_FILE, element)
-        # print(result)
+        print(result)
         return tolerance < result
     
     def buttonExists(self):
-        return self.elementExists(self.BUTTON, tolerance=.75)
+        return self.elementExists(self.BUTTON, tolerance=.65)
          
     
     def getScreenFile(self):
