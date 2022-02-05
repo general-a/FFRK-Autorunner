@@ -5,13 +5,27 @@ class ExplorationPainting(Painting):
     
     def __init__(self, location: tuple, treasureExists = False) -> None:
         super().__init__(1, 'EXPLORATION', 'exploration.png', location)
+        
+    def nextAction(self):
+        self.event.stepForward()
+        action = self._getAction()
+        if action and action[0:5] == 'START':
+            if action[6:12] == 'COMBAT':
+                self.startCombatEvent()
+            elif action[6:14] == 'TREASURE':
+                self.startTreasureEvent()
+            else:
+                self.startEffectEvent()
+        
+        return self._getAction()
+            
     
     def startCombatEvent(self):
-        self.event = EventFactory.getEvent('COMBAT', True)
+        self.startEvent('COMBAT', True)
         
     def startTreasureEvent(self):
-        self.event = EventFactory.getEvent('TREASURE')
+        self.startEvent('TREASURE')
 
     def startEffectEvent(self):
-        self.event = EventFactory.getEvent('EFFECT')
+        self.startEvent('EFFECT')
         

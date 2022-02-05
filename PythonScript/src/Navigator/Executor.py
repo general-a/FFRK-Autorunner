@@ -92,27 +92,7 @@ class Executor:
         Executor.stateWaiter(painting.event.getState())
 
 
-    @staticmethod
-    def stateWaiter(state):
-        UNIVERSAL_WAIT_TIME = 1
-        DOOR_WAIT = 2
-        PARTY_TIME = 7
-        BATTLE_INFO = 3
-        CHEST_TIME = 3
-        print('Sleeping')
-        if state == 'DOOR' or state == 'DETERMINE_STATE':
-            print('waiting...')
-            time.sleep(DOOR_WAIT)
-        elif state == 'BATTLE_INFO':
-            time.sleep(BATTLE_INFO)
-        elif state == 'PARTY_SELECT':
-            time.sleep(PARTY_TIME)
-        elif state == 'CLICK_MIDDLE_CHEST':
-            time.sleep(CHEST_TIME)        
-        elif state == 'COMPLETION_SCREEN':
-            time.sleep(20)
-        else:
-            time.sleep(UNIVERSAL_WAIT_TIME)
+
 
 
      

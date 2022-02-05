@@ -49,7 +49,19 @@ class TestEventFactory(unittest.TestCase):
         mockedFile.return_value = 'etc/images/testing/s1.png'
         test = Event('t', 't')
         res = test._getMatchPercent('etc/images/elements/fatigue.png')
-        self.assertLess(res, .7)      
-             
+        self.assertLess(res, .7)
+        
+        
+    @patch.object(Event, '_getScreenshot')
+    def test_enterButton(self, mockedFile):             
+        mockedFile.return_value = 'etc/images/testing/partysel.png'
+        test = Event('t', 't')
+        res = test._getMatchPercent('etc/images/Buttons/enter.png')
+        print(res)
+        
+
+
+
+
 if __name__ == '__main__':
     unittest.main()

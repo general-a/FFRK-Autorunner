@@ -1,5 +1,6 @@
 from PythonScript.src.Navigator.Events.Event import Event
 from PythonScript.src.Navigator.Events.Proceed import Proceed
+from PythonScript.src.ConfigureSettings import ConfigureSettings
 
 class TreasureEvent(Event):
     
@@ -9,6 +10,8 @@ class TreasureEvent(Event):
     def __init__(self):
         super().__init__('CLICK_MIDDLE_CHEST', self.STATES)
         self.proceed = Proceed()
+        self.treasureFile = ConfigureSettings().getFileFromPath('TreasureFile')
+        self.okFile = ConfigureSettings().getFileFromPath('OkFile')
         
     def _advance(self):
         proceed = self.proceed
@@ -21,6 +24,28 @@ class TreasureEvent(Event):
             self.setActionAndState('CLICK_OK', self.STATES[stateNumber])
         else:
             self.setActionAndState(None, None)
+            
+    def waitForTreasure(self):
+        self.elementWaiter(self.treasureFile)
+    
+    def takeAction(self):
+        action = self.action
+        if action == 'PROCEED':
+            self.waitForButtonAndClick()
+                     
+        elif action == 'CLICK_MIDDLE_CHEST':
+            self.elementWaiter(self.treasureFile, .85)
+            loc = self.identifier.buttonIdentifier.getMiddleChest()
+            self.controller.clickScreen(loc)
+            
+        elif action == 'CLICK_OK':
+            self.elementWaiter(self.okFile)
+            loc = self.identifier.buttonIdentifier.getOkButton()
+            self.controller.clickScreen(loc)
+
+                        
+        else:
+            raise TypeError(action)
     
         
         

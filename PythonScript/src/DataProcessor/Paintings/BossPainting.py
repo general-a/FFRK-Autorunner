@@ -6,6 +6,14 @@ class BossPainting(Painting):
     def __init__(self, location: tuple) -> None:
         super().__init__(10, 'BOSS', 'boss.png', location)
     
+    def nextAction(self):
+        self.event.stepForward()
+        action = self._getAction()
+        if action and action[0:5] == 'START':
+            self.startLabyrinthEvent()
+        
+        return self._getAction()
+    
     def startLabyrinthEvent(self):
-        self.event = EventFactory.getEvent('LABYRINTH')
+        self.startEvent('LABYRINTH')
         
