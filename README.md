@@ -3,7 +3,7 @@ Requirements:
 Python v3.10
 
 From the root:
-python -m venv venv
+python -m venv .venv
 ./venv/Scripts/activate
 pip install -e .
 
